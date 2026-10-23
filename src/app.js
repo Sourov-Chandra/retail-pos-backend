@@ -3,6 +3,7 @@ import cors from "cors";
 import { toNodeHandler } from "better-auth/node";
 import { auth } from "./config/auth.js";
 import { config } from "./config/env.js";
+import { requireAuth, requireOwner, requireStaff } from "./middleware/auth.js";
 
 const app = express();
 
@@ -30,6 +31,36 @@ app.get("/api/health", (req, res) => {
     service: "retail-pos-backend",
     timestamp: new Date().toISOString(),
     env: config.nodeEnv,
+  });
+});
+
+// Profile / Current User Endpoint
+app.get("/api/me", requireAuth, (req, res) => {
+  res.json({
+    success: true,
+    user: {
+      id: req.user.id,
+      name: req.user.name,
+      email: req.user.email,
+      role: req.user.role || "cashier",
+    },
+  });
+});
+
+// Role-protected test routes
+app.get("/api/test/owner-only", ...requireOwner, (req, res) => {
+  res.json({
+    success: true,
+    message: "Welcome Owner!",
+    user: req.user,
+  });
+});
+
+app.get("/api/test/staff-only", ...requireStaff, (req, res) => {
+  res.json({
+    success: true,
+    message: "Welcome Staff!",
+    user: req.user,
   });
 });
 
