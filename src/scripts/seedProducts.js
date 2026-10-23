@@ -9,6 +9,7 @@ const SAMPLE_PRODUCTS = [
     sellingPrice: 9500, // ৳95.00
     stockQuantity: 40,
     lowStockThreshold: 10,
+    imageUrl: "https://images.unsplash.com/photo-1550583724-b2692b85b150?w=400&q=80",
   },
   {
     name: "Pran Mango Fruit Drink (250ml)",
@@ -17,6 +18,7 @@ const SAMPLE_PRODUCTS = [
     sellingPrice: 3500, // ৳35.00
     stockQuantity: 60,
     lowStockThreshold: 15,
+    imageUrl: "https://images.unsplash.com/photo-1622597467836-f3285f2131b8?w=400&q=80",
   },
   {
     name: "Ruchi Chanachur Barbecue (150g)",
@@ -25,6 +27,7 @@ const SAMPLE_PRODUCTS = [
     sellingPrice: 4500, // ৳45.00
     stockQuantity: 50,
     lowStockThreshold: 10,
+    imageUrl: "https://images.unsplash.com/photo-1566478989037-eec170784d0b?w=400&q=80",
   },
   {
     name: "Teer Fortified Soyabean Oil (1L)",
@@ -33,6 +36,7 @@ const SAMPLE_PRODUCTS = [
     sellingPrice: 18500, // ৳185.00
     stockQuantity: 30,
     lowStockThreshold: 8,
+    imageUrl: "https://images.unsplash.com/photo-1474979266404-7eaacbcd87c5?w=400&q=80",
   },
   {
     name: "Ispahani Mirzapore Tea (400g)",
@@ -41,6 +45,7 @@ const SAMPLE_PRODUCTS = [
     sellingPrice: 21000, // ৳210.00
     stockQuantity: 25,
     lowStockThreshold: 5,
+    imageUrl: "https://images.unsplash.com/photo-1576092768241-dec231879fc3?w=400&q=80",
   },
   {
     name: "Radhuni Turmeric Powder (200g)",
@@ -49,6 +54,7 @@ const SAMPLE_PRODUCTS = [
     sellingPrice: 8000, // ৳80.00
     stockQuantity: 35,
     lowStockThreshold: 8,
+    imageUrl: "https://images.unsplash.com/photo-1615485290382-441e4d049cb5?w=400&q=80",
   },
   {
     name: "Fresh Refined Sugar (1kg)",
@@ -57,6 +63,7 @@ const SAMPLE_PRODUCTS = [
     sellingPrice: 13500, // ৳135.00
     stockQuantity: 50,
     lowStockThreshold: 10,
+    imageUrl: "https://images.unsplash.com/photo-1581441363689-1f3c3c414635?w=400&q=80",
   },
   {
     name: "Danish Condensed Milk (397g)",
@@ -65,6 +72,7 @@ const SAMPLE_PRODUCTS = [
     sellingPrice: 9000, // ৳90.00
     stockQuantity: 25,
     lowStockThreshold: 6,
+    imageUrl: "https://images.unsplash.com/photo-1528750997573-59b89d56f4f7?w=400&q=80",
   },
   {
     name: "Maggi 2-Minute Noodles (4-Pack)",
@@ -73,6 +81,7 @@ const SAMPLE_PRODUCTS = [
     sellingPrice: 9000, // ৳90.00
     stockQuantity: 45,
     lowStockThreshold: 10,
+    imageUrl: "https://images.unsplash.com/photo-1612927601601-6638404737ce?w=400&q=80",
   },
   {
     name: "Olympic Energy Plus Biscuit (300g)",
@@ -81,6 +90,7 @@ const SAMPLE_PRODUCTS = [
     sellingPrice: 6000, // ৳60.00
     stockQuantity: 50,
     lowStockThreshold: 12,
+    imageUrl: "https://images.unsplash.com/photo-1558961363-fa8fdf82db35?w=400&q=80",
   },
   {
     name: "ACI Pure Miniket Premium Rice (5kg)",
@@ -89,6 +99,7 @@ const SAMPLE_PRODUCTS = [
     sellingPrice: 38000, // ৳380.00
     stockQuantity: 20,
     lowStockThreshold: 5,
+    imageUrl: "https://images.unsplash.com/photo-1586201375761-83865001e31c?w=400&q=80",
   },
   {
     name: "Mojo Carbonated Soft Drink (500ml)",
@@ -97,6 +108,7 @@ const SAMPLE_PRODUCTS = [
     sellingPrice: 3000, // ৳30.00
     stockQuantity: 75,
     lowStockThreshold: 15,
+    imageUrl: "https://images.unsplash.com/photo-1622483767028-3f66f32aef97?w=400&q=80",
   },
   {
     name: "Lifebuoy Care Handwash (200ml)",
@@ -105,6 +117,7 @@ const SAMPLE_PRODUCTS = [
     sellingPrice: 11500, // ৳115.00
     stockQuantity: 25,
     lowStockThreshold: 6,
+    imageUrl: "https://images.unsplash.com/photo-1584308666744-24d5c474f2ae?w=400&q=80",
   },
   {
     name: "Sensodyne Fresh Mint Toothpaste (70g)",
@@ -113,6 +126,7 @@ const SAMPLE_PRODUCTS = [
     sellingPrice: 16500, // ৳165.00
     stockQuantity: 20,
     lowStockThreshold: 5,
+    imageUrl: "https://images.unsplash.com/photo-1559599101-f09722fb4948?w=400&q=80",
   },
   {
     name: "All Time Premium Butter Bread (400g)",
@@ -121,6 +135,7 @@ const SAMPLE_PRODUCTS = [
     sellingPrice: 6500, // ৳65.00
     stockQuantity: 30,
     lowStockThreshold: 8,
+    imageUrl: "https://images.unsplash.com/photo-1509440159596-0249088772ff?w=400&q=80",
   },
 ];
 

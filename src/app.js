@@ -1,5 +1,7 @@
 import express from "express";
 import cors from "cors";
+import path from "path";
+import { fileURLToPath } from "url";
 import { toNodeHandler } from "better-auth/node";
 import { auth } from "./config/auth.js";
 import { config } from "./config/env.js";
@@ -8,8 +10,15 @@ import productRoutes from "./modules/products/product.routes.js";
 import salesRoutes from "./modules/sales/sales.routes.js";
 import inventoryRoutes from "./modules/inventory/inventory.routes.js";
 import dashboardRoutes from "./modules/dashboard/dashboard.routes.js";
+import uploadRoutes from "./modules/upload/upload.routes.js";
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
 const app = express();
+
+// Serve local uploaded images statically
+app.use("/uploads", express.static(path.resolve(__dirname, "../uploads")));
 
 // 1. CORS Configuration
 app.use(
@@ -43,6 +52,7 @@ app.use("/api/products", productRoutes);
 app.use("/api/sales", salesRoutes);
 app.use("/api/inventory", inventoryRoutes);
 app.use("/api/dashboard", dashboardRoutes);
+app.use("/api/upload", uploadRoutes);
 
 // Profile / Current User Endpoint
 app.get("/api/me", requireAuth, (req, res) => {

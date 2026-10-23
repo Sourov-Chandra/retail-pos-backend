@@ -75,6 +75,7 @@ export const productService = {
       sellingPrice: price,
       stockQuantity: stock,
       lowStockThreshold: threshold,
+      imageUrl: data.imageUrl ? String(data.imageUrl).trim() : null,
       isActive: Boolean(isActive),
       createdAt: now,
       updatedAt: now,
@@ -271,6 +272,10 @@ export const productService = {
 
     if (updateData.isActive !== undefined) {
       updates.isActive = Boolean(updateData.isActive);
+    }
+
+    if (updateData.imageUrl !== undefined) {
+      updates.imageUrl = updateData.imageUrl ? String(updateData.imageUrl).trim() : null;
     }
 
     await db.collection("products").updateOne({ _id: objectId }, { $set: updates });
