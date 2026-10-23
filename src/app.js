@@ -16,8 +16,8 @@ app.use(
   })
 );
 
-// 2. Mount Better Auth Handler before JSON body parser
-app.all("/api/auth/*", toNodeHandler(auth));
+// 2. Mount Better Auth Handler before JSON body parser (Express 5 wildcard syntax)
+app.all(["/api/auth", "/api/auth/*splat"], toNodeHandler(auth));
 
 // 3. Body Parsing Middleware
 app.use(express.json());
