@@ -7,6 +7,7 @@ import { requireAuth, requireOwner, requireStaff } from "./middleware/auth.js";
 import productRoutes from "./modules/products/product.routes.js";
 import salesRoutes from "./modules/sales/sales.routes.js";
 import inventoryRoutes from "./modules/inventory/inventory.routes.js";
+import dashboardRoutes from "./modules/dashboard/dashboard.routes.js";
 
 const app = express();
 
@@ -41,6 +42,7 @@ app.get("/api/health", (req, res) => {
 app.use("/api/products", productRoutes);
 app.use("/api/sales", salesRoutes);
 app.use("/api/inventory", inventoryRoutes);
+app.use("/api/dashboard", dashboardRoutes);
 
 // Profile / Current User Endpoint
 app.get("/api/me", requireAuth, (req, res) => {
