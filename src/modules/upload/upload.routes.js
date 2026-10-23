@@ -27,22 +27,34 @@ const storage = multer.diskStorage({
   },
 });
 
-// File filter (images only)
+// Comprehensive image file filter (supports AVIF, WebP, PNG, JPEG, GIF, etc.)
 const fileFilter = (req, file, cb) => {
-  const allowedMimes = ["image/jpeg", "image/png", "image/webp", "image/gif", "image/avif"];
-  if (allowedMimes.includes(file.mimetype)) {
+  const ext = path.extname(file.originalname).toLowerCase();
+  const allowedExtensions = [".jpg", ".jpeg", ".png", ".webp", ".avif", ".gif", ".svg", ".bmp"];
+  const allowedMimes = [
+    "image/jpeg",
+    "image/png",
+    "image/webp",
+    "image/avif",
+    "image/gif",
+    "image/svg+xml",
+    "image/bmp",
+    "application/octet-stream", // Frequently assigned by Windows for AVIF without AV1 extension
+  ];
+
+  if (allowedExtensions.includes(ext) || allowedMimes.includes(file.mimetype)) {
     cb(null, true);
   } else {
-    const err = new Error("Only image files (JPEG, PNG, WebP, GIF) are allowed.");
-    err.code = "VALIDATION_ERROR";
-    err.statusCode = 400;
+    const err = new Error(`File type '${ext}' is not supported. Please upload an image (AVIF, WebP, JPG, PNG).`);
+    err.code = "UNSUPPORTED_MEDIA_TYPE";
+    err.statusCode = 415;
     cb(err, false);
   }
 };
 
 const upload = multer({
   storage,
-  limits: { fileSize: 10 * 1024 * 1024 }, // 10MB max
+  limits: { fileSize: 15 * 1024 * 1024 }, // 15MB max
   fileFilter,
 });
 
@@ -56,7 +68,7 @@ router.post("/", ...requireStaff, upload.single("image"), (req, res, next) => {
         success: false,
         error: {
           code: "VALIDATION_ERROR",
-          message: "No image file was provided.",
+          message: "No image file was received.",
         },
       });
     }
@@ -69,6 +81,7 @@ router.post("/", ...requireStaff, upload.single("image"), (req, res, next) => {
       url: fullUrl,
       filename: req.file.filename,
       size: req.file.size,
+      mimetype: req.file.mimetype,
     });
   } catch (error) {
     next(error);

@@ -20,13 +20,27 @@ const app = express();
 // Serve local uploaded images statically
 app.use("/uploads", express.static(path.resolve(__dirname, "../uploads")));
 
-// 1. CORS Configuration
+// 1. CORS Configuration (Supports localhost & 127.0.0.1 for seamless local development)
+const allowedOrigins = [
+  config.frontendUrl,
+  "http://localhost:3000",
+  "http://127.0.0.1:3000",
+  "http://localhost:3001",
+  "http://127.0.0.1:3001",
+];
+
 app.use(
   cors({
-    origin: config.frontendUrl,
+    origin: (origin, callback) => {
+      if (!origin || allowedOrigins.includes(origin) || config.nodeEnv === "development") {
+        callback(null, true);
+      } else {
+        callback(new Error(`Not allowed by CORS: ${origin}`));
+      }
+    },
     credentials: true,
     methods: ["GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"],
-    allowedHeaders: ["Content-Type", "Authorization", "Cookie"],
+    allowedHeaders: ["Content-Type", "Authorization", "Cookie", "X-Requested-With", "Accept"],
   })
 );
 
