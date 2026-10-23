@@ -5,6 +5,8 @@ import { auth } from "./config/auth.js";
 import { config } from "./config/env.js";
 import { requireAuth, requireOwner, requireStaff } from "./middleware/auth.js";
 import productRoutes from "./modules/products/product.routes.js";
+import salesRoutes from "./modules/sales/sales.routes.js";
+import inventoryRoutes from "./modules/inventory/inventory.routes.js";
 
 const app = express();
 
@@ -37,6 +39,8 @@ app.get("/api/health", (req, res) => {
 
 // 5. Business Routes
 app.use("/api/products", productRoutes);
+app.use("/api/sales", salesRoutes);
+app.use("/api/inventory", inventoryRoutes);
 
 // Profile / Current User Endpoint
 app.get("/api/me", requireAuth, (req, res) => {

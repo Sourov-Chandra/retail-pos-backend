@@ -27,6 +27,13 @@ export async function connectDB() {
       await movements.createIndex({ createdAt: -1 });
       await movements.createIndex({ referenceType: 1, referenceId: 1 });
 
+      // Sales indexes
+      const sales = db.collection("sales");
+      await sales.createIndex({ saleNumber: 1 }, { unique: true });
+      await sales.createIndex({ idempotencyKey: 1 }, { unique: true, sparse: true });
+      await sales.createIndex({ createdAt: -1 });
+      await sales.createIndex({ cashierId: 1, createdAt: -1 });
+
       console.log("[Database] Collections indexes verified.");
     } catch (indexError) {
       console.warn("[Database] Index creation notice:", indexError.message);
