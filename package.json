@@ -1,0 +1,17 @@
+{
+  "name": "retail-pos-backend",
+  "version": "1.0.0",
+  "description": "Retail POS & Inventory Management System Backend",
+  "type": "module",
+  "main": "src/server.js",
+  "scripts": {
+    "start": "node src/server.js",
+    "dev": "node --watch src/server.js"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "better-auth": "^1.7.12"
+  }
+}
