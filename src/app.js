@@ -4,6 +4,7 @@ import { toNodeHandler } from "better-auth/node";
 import { auth } from "./config/auth.js";
 import { config } from "./config/env.js";
 import { requireAuth, requireOwner, requireStaff } from "./middleware/auth.js";
+import productRoutes from "./modules/products/product.routes.js";
 
 const app = express();
 
@@ -33,6 +34,9 @@ app.get("/api/health", (req, res) => {
     env: config.nodeEnv,
   });
 });
+
+// 5. Business Routes
+app.use("/api/products", productRoutes);
 
 // Profile / Current User Endpoint
 app.get("/api/me", requireAuth, (req, res) => {
