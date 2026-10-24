@@ -7,7 +7,7 @@ async function startServer() {
     console.log("[Server] Connecting to MongoDB...");
     await connectDB();
 
-    app.listen(config.port, () => {
+    app.listen(config.port, "0.0.0.0", () => {
       console.log(`[Server] Retail POS API is running on http://localhost:${config.port}`);
       console.log(`[Server] Better Auth mounted at http://localhost:${config.port}/api/auth`);
       console.log(`[Server] Health check available at http://localhost:${config.port}/api/health`);
