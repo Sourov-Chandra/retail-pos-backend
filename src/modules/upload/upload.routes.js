@@ -1,67 +1,42 @@
 import { Router } from "express";
 import multer from "multer";
 import path from "path";
-import fs from "fs";
-import { fileURLToPath } from "url";
 import { requireStaff } from "../../middleware/auth.js";
 import { config } from "../../config/env.js";
 
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
-const uploadDir = path.resolve(__dirname, "../../../uploads");
-
-// Ensure uploads directory exists
-if (!fs.existsSync(uploadDir)) {
-  fs.mkdirSync(uploadDir, { recursive: true });
-}
-
-// Multer storage engine
-const storage = multer.diskStorage({
-  destination: (req, file, cb) => {
-    cb(null, uploadDir);
-  },
-  filename: (req, file, cb) => {
-    const ext = path.extname(file.originalname).toLowerCase() || ".jpg";
-    const uniqueName = `prod-${Date.now()}-${Math.round(Math.random() * 1e9)}${ext}`;
-    cb(null, uniqueName);
-  },
-});
-
-// Comprehensive image file filter (supports AVIF, WebP, PNG, JPEG, GIF, etc.)
-const fileFilter = (req, file, cb) => {
-  const ext = path.extname(file.originalname).toLowerCase();
-  const allowedExtensions = [".jpg", ".jpeg", ".png", ".webp", ".avif", ".gif", ".svg", ".bmp"];
-  const allowedMimes = [
-    "image/jpeg",
-    "image/png",
-    "image/webp",
-    "image/avif",
-    "image/gif",
-    "image/svg+xml",
-    "image/bmp",
-    "application/octet-stream", // Frequently assigned by Windows for AVIF without AV1 extension
-  ];
-
-  if (allowedExtensions.includes(ext) || allowedMimes.includes(file.mimetype)) {
-    cb(null, true);
-  } else {
-    const err = new Error(`File type '${ext}' is not supported. Please upload an image (AVIF, WebP, JPG, PNG).`);
-    err.code = "UNSUPPORTED_MEDIA_TYPE";
-    err.statusCode = 415;
-    cb(err, false);
-  }
-};
-
+// Use memory storage: no local disk files created (100% Vercel & serverless ready)
 const upload = multer({
-  storage,
-  limits: { fileSize: 15 * 1024 * 1024 }, // 15MB max
-  fileFilter,
+  storage: multer.memoryStorage(),
+  limits: { fileSize: 32 * 1024 * 1024 }, // 32MB max
+  fileFilter: (req, file, cb) => {
+    const ext = path.extname(file.originalname).toLowerCase();
+    const allowedExtensions = [".jpg", ".jpeg", ".png", ".webp", ".avif", ".gif", ".svg", ".bmp"];
+    const allowedMimes = [
+      "image/jpeg",
+      "image/png",
+      "image/webp",
+      "image/avif",
+      "image/gif",
+      "image/svg+xml",
+      "image/bmp",
+      "application/octet-stream",
+    ];
+
+    if (allowedExtensions.includes(ext) || allowedMimes.includes(file.mimetype)) {
+      cb(null, true);
+    } else {
+      const err = new Error(`File type '${ext}' is not supported. Please upload an image.`);
+      err.code = "UNSUPPORTED_MEDIA_TYPE";
+      err.statusCode = 415;
+      cb(err, false);
+    }
+  },
 });
 
 const router = Router();
 
-// Staff (both Owner and Cashier) can upload product photos / snap camera shots
-router.post("/", ...requireStaff, upload.single("image"), (req, res, next) => {
+// Staff (both Owner and Cashier) can upload product photos / camera snapshots directly to ImgBB Cloud
+router.post("/", ...requireStaff, upload.single("image"), async (req, res, next) => {
   try {
     if (!req.file) {
       return res.status(400).json({
@@ -73,15 +48,49 @@ router.post("/", ...requireStaff, upload.single("image"), (req, res, next) => {
       });
     }
 
-    const relativeUrl = `/uploads/${req.file.filename}`;
-    const fullUrl = `http://localhost:${config.port}${relativeUrl}`;
+    if (!config.imgbbApiKey) {
+      return res.status(500).json({
+        success: false,
+        error: {
+          code: "CONFIG_ERROR",
+          message: "ImgBB API key is not configured.",
+        },
+      });
+    }
+
+    // Convert memory buffer to base64 for ImgBB API
+    const base64Image = req.file.buffer.toString("base64");
+
+    const imgbbForm = new FormData();
+    imgbbForm.append("image", base64Image);
+    if (req.file.originalname) {
+      const safeName = path.parse(req.file.originalname).name.replace(/[^a-zA-Z0-9_-]/g, "_");
+      imgbbForm.append("name", safeName);
+    }
+
+    const imgbbResponse = await fetch(`https://api.imgbb.com/1/upload?key=${config.imgbbApiKey}`, {
+      method: "POST",
+      body: imgbbForm,
+    });
+
+    const imgbbData = await imgbbResponse.json();
+
+    if (!imgbbResponse.ok || !imgbbData.success) {
+      const errMsg = imgbbData.error?.message || "Failed to upload image to ImgBB CDN.";
+      const err = new Error(errMsg);
+      err.code = "IMGBB_UPLOAD_ERROR";
+      err.statusCode = 502;
+      throw err;
+    }
+
+    const cdnUrl = imgbbData.data.display_url || imgbbData.data.url;
 
     res.status(201).json({
       success: true,
-      url: fullUrl,
-      filename: req.file.filename,
+      url: cdnUrl,
+      thumbnailUrl: imgbbData.data.thumb?.url || cdnUrl,
+      title: imgbbData.data.title,
       size: req.file.size,
-      mimetype: req.file.mimetype,
     });
   } catch (error) {
     next(error);

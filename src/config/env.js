@@ -9,4 +9,5 @@ export const config = {
   betterAuthSecret: process.env.BETTER_AUTH_SECRET,
   betterAuthUrl: process.env.BETTER_AUTH_URL || "http://localhost:5000",
   frontendUrl: process.env.FRONTEND_URL || "http://localhost:3000",
+  imgbbApiKey: process.env.IMGBB_API_KEY,
 };
