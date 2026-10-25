@@ -1,7 +1,7 @@
 {
   "name": "retail-pos-backend",
   "version": "1.0.0",
-  "description": "Retail POS & Inventory Management System Backend",
+  "description": "Dokandari (দোকানদারি) - Retail POS & Inventory Management System Backend",
   "type": "module",
   "main": "src/server.js",
   "scripts": {

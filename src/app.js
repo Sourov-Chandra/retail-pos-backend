@@ -54,9 +54,9 @@ app.use(express.urlencoded({ extended: true }));
 app.get("/", (req, res) => {
   res.json({
     success: true,
-    name: "Retail POS & Inventory System API",
+    name: "Dokandari (দোকানদারি) - Retail POS & Inventory System API",
     version: "1.0.0",
-    description: "Bangladesh Edition Retail POS Backend (৳ BDT)",
+    description: "Dokandari Bangladesh Edition Retail POS Backend (৳ BDT)",
     status: "running",
     endpoints: {
       health: "/api/health",
@@ -74,7 +74,7 @@ app.get("/", (req, res) => {
 app.get("/api/health", (req, res) => {
   res.json({
     status: "ok",
-    service: "retail-pos-backend",
+    service: "dokandari-backend",
     timestamp: new Date().toISOString(),
     env: config.nodeEnv,
   });
