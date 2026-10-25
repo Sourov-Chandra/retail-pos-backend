@@ -51,6 +51,26 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
 // 4. Base / Health Check Routes
+app.get("/", (req, res) => {
+  res.json({
+    success: true,
+    name: "Retail POS & Inventory System API",
+    version: "1.0.0",
+    description: "Bangladesh Edition Retail POS Backend (৳ BDT)",
+    status: "running",
+    endpoints: {
+      health: "/api/health",
+      auth: "/api/auth",
+      products: "/api/products",
+      sales: "/api/sales",
+      inventory: "/api/inventory",
+      dashboard: "/api/dashboard",
+      upload: "/api/upload",
+    },
+    documentation: "https://github.com/Sourov-Chandra/retail-pos-backend",
+  });
+});
+
 app.get("/api/health", (req, res) => {
   res.json({
     status: "ok",
