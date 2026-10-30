@@ -11,6 +11,7 @@ import salesRoutes from "./modules/sales/sales.routes.js";
 import inventoryRoutes from "./modules/inventory/inventory.routes.js";
 import dashboardRoutes from "./modules/dashboard/dashboard.routes.js";
 import uploadRoutes from "./modules/upload/upload.routes.js";
+import staffRoutes from "./modules/staff/staff.routes.js";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -66,6 +67,7 @@ app.get("/", (req, res) => {
       inventory: "/api/inventory",
       dashboard: "/api/dashboard",
       upload: "/api/upload",
+      staff: "/api/staff",
     },
     documentation: "https://github.com/Sourov-Chandra/retail-pos-backend",
   });
@@ -86,6 +88,7 @@ app.use("/api/sales", salesRoutes);
 app.use("/api/inventory", inventoryRoutes);
 app.use("/api/dashboard", dashboardRoutes);
 app.use("/api/upload", uploadRoutes);
+app.use("/api/staff", staffRoutes);
 
 // Profile / Current User Endpoint
 app.get("/api/me", requireAuth, (req, res) => {
